@@ -1,10 +1,18 @@
 ---
 # tasks file for filebeat
 
-- name: Install Nginx
-  package:
-    name: nginx
-    state: present
+- name: Check if Nginx is installed
+  ansible.builtin.stat:
+    path: /usr/sbin/nginx
+  register: nginx_installed
+
+- name: Install Nginx if not already installed
+  when: nginx_installed.stat.exists == false
+  block:
+     - name: Install Nginx
+       package:
+         name: nginx
+         state: present
 
 - name: Start Nginx service
   service:
@@ -12,21 +20,36 @@
     state: started
     enabled: yes
 
-- name: Add Elasticsearch GPG key
-  apt_key:
-    url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+- name: Check if Filebeat is installed
+  ansible.builtin.stat:
+    path: /etc/filebeat/filebeat.yml
+  register: filebeat_installed
 
-- name: Install a .deb package from the internet
-  ansible.builtin.apt:
-    deb: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.10.2-arm64.deb
+- name: Install Filebeat if not already installed
+  when: filebeat_installed.stat.exists == false
+  block:
+     - name: Add Elasticsearch GPG key
+       apt_key:
+          url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
 
-- name: Set permissions for Filebeat  directory
-  ansible.builtin.file:
-    path: "/etc/filebeat"
-    owner: ubuntu
-    group: ubuntu
-    mode: "0755"
-    recurse: yes
+     - name: Install a .deb package from the internet
+       ansible.builtin.apt:
+          deb: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.10.2-arm64.deb
+
+     - name: Set permissions for Filebeat  directory
+       ansible.builtin.file:
+          path: "/etc/filebeat"
+          owner: ubuntu
+          group: ubuntu
+          mode: "0755"
+          recurse: yes
+     - name: Set permissions for Filebeat configuration file
+       ansible.builtin.file:
+          path: /etc/filebeat/filebeat.yml
+          owner: root
+          group: root
+          mode: "0644"
+       become: yes
 
 - name: Configure Filebeat yml file
   template:
@@ -34,13 +57,6 @@
     dest: "{{ filebeat_config_path }}"
   notify: Restart Filebeat
 
-- name: Set permissions for Filebeat configuration file
-  ansible.builtin.file:
-    path: /etc/filebeat/filebeat.yml
-    owner: root
-    group: root
-    mode: "0644"
-  become: yes
 
 - name: Start Filebeat service
   ansible.builtin.systemd:

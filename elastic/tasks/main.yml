@@ -1,11 +1,19 @@
 ---
-- name: Add Elasticsearch GPG key
-  apt_key:
-    url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+- name: Check if Elasticsearch is installed
+  ansible.builtin.stat:
+    path: /usr/share/elasticsearch/bin/elasticsearch
+  register: elasticsearch_installed
 
-- name: Install a .deb package from the internet
-  ansible.builtin.apt:
-    deb: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.2-arm64.deb
+- name: Install Elasticsearch if not already installed
+  when: elasticsearch_installed.stat.exists == false
+  block:
+     - name: Add Elasticsearch GPG key
+       apt_key:
+          url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+
+     - name: Install a .deb package from the internet
+       ansible.builtin.apt:
+          deb: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.2-arm64.deb
 
 
 - name: Configure Elasticsearch yml file
