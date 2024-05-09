@@ -1,11 +1,11 @@
-
 ---
 - name: Install Elasticsearch and Kibana packages
-  hosts: 192.168.64.61
+  hosts: 192.168.64.64
   become: true
   vars:
     ansible_ssh_private_key_file: ~/.ssh/id_rsa
     ansible_user: ubuntu
-    elastickibana_vm_ip: 192.168.64.61
+    main_ip: 192.168.64.64
   roles:
    - /Users/sahana.intern/ansible-ek/elastic
+

@@ -1,5 +1,5 @@
 ---
 # defaults file for filebeat
 
-elasticsearchkibana_host: 192.168.64.61
+elasticsearchkibana_host: "{{ main_ip }}"
 filebeat_config_path: /etc/filebeat/filebeat.yml

@@ -1,5 +1,5 @@
 ---
-- hosts: 192.168.64.61
+- hosts: {{ elastickibana_vp_ip }}
   remote_user: root
   roles:
     - elastic

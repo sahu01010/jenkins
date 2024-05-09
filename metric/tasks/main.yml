@@ -69,13 +69,13 @@
          group: root
          mode: "0644"
 
-    - name: Set permissions for Metricbeat configuration file
-      ansible.builtin.file:
-         path: /usr/share/metricbeat/metricbeat-7.10.2-linux-arm64/metricbeat.yml
-         owner: root
-         group: root
-         mode: "0644"
-         become: yes
+- name: Set permissions for Metricbeat configuration file
+  ansible.builtin.file:
+    path: /usr/share/metricbeat/metricbeat-7.10.2-linux-arm64/metricbeat.yml
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
 
 - name: Configure Metricbeat
   template:
