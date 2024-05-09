@@ -1,0 +1,3 @@
+[elk]
+auto-elk ansible_host=192.168.64.57
+fvm ansible_host=192.168.64.58

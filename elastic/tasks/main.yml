@@ -1,0 +1,22 @@
+---
+- name: Add Elasticsearch GPG key
+  apt_key:
+    url: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+
+- name: Install a .deb package from the internet
+  ansible.builtin.apt:
+    deb: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.2-arm64.deb
+
+
+- name: Configure Elasticsearch yml file
+  template:
+    src: elasticsearch.yml.j2
+    dest: "{{ elasticsearch_config_path }}"
+  tags: config
+
+- name: Start Elasticsearch service
+  systemd:
+    name: elasticsearch
+    state: started
+    enabled: yes
+

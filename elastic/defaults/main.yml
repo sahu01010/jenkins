@@ -1,0 +1,17 @@
+---
+# defaults file for elastic
+
+elastickibana_vm_ip: 192.168.64.61
+elasticsearch_config_path: /etc/elasticsearch/elasticsearch.yml
+cluster_name: my-app
+node_name: node-1
+
+path_data: /var/lib/elasticsearch
+path_logs: /var/log/elasticsearch
+
+network_host: 192.168.64.61
+http_port: 9200
+
+discovery_seed_hosts: ["192.168.64.61"]
+cluster_initial_master_nodes: ["node-1"]
+http_host: 0.0.0.0
