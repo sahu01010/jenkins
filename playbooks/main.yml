@@ -1,33 +1,39 @@
 ---
 - name: Install Elasticsearch and Kibana packages
-  hosts: 192.168.64.64
+  hosts: "{{ main_ip }}"
   become: true
+  vars_files:
+    - /Users/sahana.intern/ansible-ek/group_vars/global_vars.yml
   vars:
     ansible_ssh_private_key_file: ~/.ssh/id_rsa
     ansible_user: ubuntu
-    main_ip: 192.168.64.64
+    main_ip: "{{ main_ip }}"
   roles:
    - /Users/sahana.intern/ansible-ek/elastic
    - /Users/sahana.intern/ansible-ek/kib
    
 
 - name: Install  Metricbeat  packages
-  hosts: 192.168.64.65
+  hosts: "{{ metricbeat_ip }}"
   become: true
+  vars_files:
+    - /Users/sahana.intern/ansible-ek/group_vars/global_vars.yml
   vars:
     ansible_ssh_private_key_file: ~/.ssh/id_rsa
     ansible_user: ubuntu  
-    main_ip: 192.168.64.64
+    main_ip: "{{ main_ip }}"
   roles:
    - /Users/sahana.intern/ansible-ek/metric
    
 - name: Install  FILEBEAT
-  hosts: 192.168.64.66
+  hosts: "{{ filebeat_ip }}"
   become: true
+  vars_files:
+    - /Users/sahana.intern/ansible-ek/group_vars/global_vars.yml
   vars:
     ansible_ssh_private_key_file: ~/.ssh/id_rsa
     ansible_user: ubuntu
-    main_ip: 192.168.64.64
+    main_ip: "{{ main_ip }}"
   roles:
    - /Users/sahana.intern/ansible-ek/filebeat   
    
