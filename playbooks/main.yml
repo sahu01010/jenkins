@@ -37,9 +37,4 @@
   roles:
    - /Users/sahana.intern/ansible-ek/filebeat   
    
-- name: Playbook to print "hi" on localhost
-  hosts: localhost
-  tasks:
-    - name: print hello
-      shell: echo "hi"   
 
